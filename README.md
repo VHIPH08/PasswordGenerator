@@ -1,45 +1,142 @@
-# Password Generator
+# 🔐 Password Generator (CLI)
 
-Password generator written in Python.
+A flexible and secure password generator built with Python.
+Supports custom length, multiple passwords, character selection, and clipboard integration.
 
-## Description
-This project generates random passwords with different difficulty levels.
-It is designed for learning purposes and demonstrates working with strings,
-random generation and basic class design.
+---
 
-The generator can create multiple passwords at once and save them to a file.
+## 🚀 Features
 
-## Features
-- Three difficulty levels:
-  - easy
-  - middle
-  - hard
-- Custom number of generated passwords
-- Uses secure random generation (`secrets`)
-- Avoids ambiguous characters in hard mode
-- Saves generated passwords to a text file
+* Generate one or multiple passwords
+* Custom password length
+* Choose character types:
 
-## Difficulty levels
-- **easy**
-  - Length: 4–7
-  - Letters and digits
-- **middle**
-  - Length: 8–11
-  - Printable characters
-- **hard**
-  - Length: 12–29
-  - Letters, digits and special symbols
-  - Excludes ambiguous characters (0, O, l, I, etc.)
+  * Uppercase letters
+  * Lowercase letters
+  * Numbers
+  * Punctuation
+* Optional exclusion of ambiguous characters (e.g. `O`, `0`, `l`, `1`)
+* Automatic clipboard copy (for single password)
+* Save passwords to a file
+* Input validation with defaults
+* Secure randomness using `secrets`
 
-## Project structure
-password_generator/
-├── password_generator.py
-└── README.md
+---
 
-## Usage
-```python
-from password_generator import PasswordGenerator
+## 🧠 How It Works
 
-generator = PasswordGenerator("hard", 5)
-passwords = generator.password_gen()
-generator.password_saver(passwords)
+The program follows a clean architecture pipeline:
+
+```text
+Input → Validation → Alphabet Creation → Password Generation → Output
+```
+
+Each step is handled by a separate function for better readability and scalability.
+
+---
+
+## ⚙️ Installation
+
+1. Make sure you have Python 3 installed
+2. Install required dependency:
+
+```bash
+pip install pyperclip
+```
+
+---
+
+## ▶️ Usage
+
+Run the script:
+
+```bash
+python main.py
+```
+
+You will be prompted to enter:
+
+* Password length (default: 12)
+* Number of passwords (default: 1)
+* Character types (Y/N):
+
+  * Uppercase
+  * Lowercase
+  * Numbers
+  * Symbols
+* Whether to exclude ambiguous characters
+
+---
+
+## 📋 Example
+
+```text
+How long u wanna ur password be?(Default is 12) → 10
+How many passwords u want?(Default is 1) → 2
+Upper letters? → Y
+Lower letters? → Y
+Numbers? → Y
+Punctuation? → N
+Ban ambiguous characters? → Y
+```
+
+Output:
+
+```text
+Your passwords: ['aF8kLm2QpZ', 'X9vRt4BnQa']
+```
+
+---
+
+## 📌 Notes
+
+* If only one password is generated:
+
+  * It is automatically copied to clipboard
+  * Clipboard is cleared after 60 seconds
+* If no character types are selected:
+
+  * Program raises an error (`Alphabet is empty`)
+
+---
+
+## ⚠️ Limitations
+
+* Validation still uses `input()` inside logic (can be improved)
+* No CLI arguments yet (interactive only)
+* No password strength indicator
+
+---
+
+## 🛠️ Future Improvements
+
+* Add CLI arguments (`--length`, `--upper`, etc.)
+* Password strength checker
+* GUI version
+* Custom word-based passwords
+* Unit tests
+
+---
+
+## 📁 File Output
+
+Passwords can be saved to:
+
+```text
+file.txt
+```
+
+Each password is written on a new line.
+
+---
+
+## 👨‍💻 Author Notes
+
+This project demonstrates:
+
+* Clean code structure
+* Separation of concerns
+* Working with dictionaries and validation
+* Secure random generation
+
+---
