@@ -1,4 +1,4 @@
-# 🔐 Password Generator (CLI)
+# 🔐 Password Generator
 
 A flexible and secure password generator built with Python.
 Supports custom length, multiple passwords, character selection, and clipboard integration.
