@@ -1,46 +1,56 @@
-# 🔐 Password Generator
+# 🔐 Password Generator (Python)
 
-A flexible and secure password generator built with Python.
-Supports custom length, multiple passwords, character selection, and clipboard integration.
+A secure and flexible password generator written in Python.
+Supports customizable password rules, multiple outputs, and clipboard integration.
 
 ---
 
 ## 🚀 Features
 
 * Generate one or multiple passwords
-* Custom password length
-* Choose character types:
+* Customizable length and quantity
+* Support for:
 
   * Uppercase letters
   * Lowercase letters
   * Numbers
-  * Punctuation
-* Optional exclusion of ambiguous characters (e.g. `O`, `0`, `l`, `1`)
-* Automatic clipboard copy (for single password)
+  * Special characters
+* Guarantees **at least one character of each selected type**
+* Optional removal of confusing/specific symbols (banlist)
+* Clipboard support (copy last generated password)
 * Save passwords to a file
-* Input validation with defaults
-* Secure randomness using `secrets`
 
 ---
 
 ## 🧠 How It Works
 
-The program follows a clean architecture pipeline:
+The generator follows a secure and predictable algorithm:
 
-```text
-Input → Validation → Alphabet Creation → Password Generation → Output
-```
+1. Select active character sets based on user input
+2. Ensure at least **one character from each selected type**
+3. Generate remaining characters randomly
+4. Shuffle the final password for better randomness
+5. Return the result
 
-Each step is handled by a separate function for better readability and scalability.
+This guarantees both:
+
+* randomness 🔀
+* compliance with password requirements 🔒
 
 ---
 
 ## ⚙️ Installation
 
-1. Make sure you have Python 3 installed
-2. Install required dependency:
+1. Clone the repository:
 
-```bash
+```
+git clone <your-repo-url>
+cd password-generator
+```
+
+2. Install dependencies:
+
+```
 pip install pyperclip
 ```
 
@@ -50,82 +60,71 @@ pip install pyperclip
 
 Run the script:
 
-```bash
+```
 python main.py
 ```
 
-You will be prompted to enter:
+Follow the prompts in the terminal:
 
-* Password length (default: 12)
-* Number of passwords (default: 1)
-* Character types (Y/N):
-
-  * Uppercase
-  * Lowercase
-  * Numbers
-  * Symbols
-* Whether to exclude ambiguous characters
+* Set password length
+* Choose character types
+* Select number of passwords
+* Optionally enable clipboard saving
 
 ---
 
-## 📋 Example
+## 📋 Example Output
 
-```text
-How long u wanna ur password be?(Default is 12) → 10
-How many passwords u want?(Default is 1) → 2
-Upper letters? → Y
-Lower letters? → Y
-Numbers? → Y
-Punctuation? → N
-Ban ambiguous characters? → Y
 ```
-
-Output:
-
-```text
-Your passwords: ['aF8kLm2QpZ', 'X9vRt4BnQa']
+Your password(s): ['A9$dK2!xPq']
 ```
 
 ---
 
-## 📌 Notes
+## ⚠️ Notes
 
-* If only one password is generated:
-
-  * It is automatically copied to clipboard
-  * Clipboard is cleared after 60 seconds
-* If no character types are selected:
-
-  * Program raises an error (`Alphabet is empty`)
+* If multiple passwords are generated, **only the last one is copied to clipboard**
+* Clipboard data may be accessible by other applications — use with caution
+* If no character types are selected, the program will raise an error
 
 ---
 
-## ⚠️ Limitations
+## 🛡️ Security Considerations
 
-* Validation still uses `input()` inside logic (can be improved)
-* No CLI arguments yet (interactive only)
-* No password strength indicator
+* Uses Python's `secrets` module for cryptographically secure randomness
+* Avoids predictable patterns
+* Supports filtering of ambiguous characters
 
 ---
 
-## 🛠️ Future Improvements
+## 📁 Project Structure
 
-* Add CLI arguments (`--length`, `--upper`, etc.)
+```
+password-generator/
+│
+├── main.py
+├── passwords.txt
+└── README.md
+```
+
+---
+
+## 💡 Future Improvements
+
 * Password strength checker
-* GUI version
-* Custom word-based passwords
-* Unit tests
+* CLI arguments support (`--length`, `--digits`, etc.)
+* Passphrase generator (e.g. `apple-dog-sun`)
+* GUI interface
+* Custom user-defined character sets
 
 ---
 
-## 📁 File Output
+## 👨‍💻 Author
 
-Passwords can be saved to:
-
-```text
-file.txt
-```
-
-Each password is written on a new line.
+Created as a learning project to improve Python skills and understanding of secure random generation.
 
 ---
+
+## 📜 License
+
+This project is open-source and free to use.
