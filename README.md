@@ -129,14 +129,3 @@ file.txt
 Each password is written on a new line.
 
 ---
-
-## 👨‍💻 Author Notes
-
-This project demonstrates:
-
-* Clean code structure
-* Separation of concerns
-* Working with dictionaries and validation
-* Secure random generation
-
----
