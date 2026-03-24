@@ -1,82 +1,101 @@
 import string
 import secrets
-import time
 import pyperclip
-
+from random import shuffle
 
 class PasswordGenerator:
-    def get_input(self):
-        # inputing a data
-        howlong = input("How long u wanna ur password be?(Default is 12)")
-        howmuch = input("How many passwords u want?(Default is 1)")
+
+    def get_input(self) -> dict:
+        howlong = input("How long you wanna your password be?(Default is 12)")
+        howmuch = input("How many passwords you want?(Default is 1)")
 
         isup = input("Do you want upper letters?(Y/N)")
         isdown = input("Do you want lower letters?(Y/N)")
         isnum = input("Do you want numbers?(Y/N)")
         ispunct = input("Do you want punctuation?(Y/N)")
         banletters = input("Do you want to use banletter list in alphabets?(Y/N)")
-        # keywords = input("Do you want any keywords?(Y/N)")
+        print("Warning! If you want more than 1 password, you should know that only last password will be copied into copyboard.")
+        save_in_copyboard = input("Do you want to save your password in copyboard?(Y/N)")
 
-        config = {"howlong": howlong, "howmuch": howmuch, "isup": isup, "isdown": isdown, "isnum": isnum,
-                  "ispunct": ispunct, "banletters": banletters}
-
+        config = {
+            "howlong": howlong,
+            "howmuch": howmuch,
+            "isup": isup,
+            "isdown": isdown,
+            "isnum": isnum,
+            "ispunct": ispunct,
+            "banletters": banletters,
+            "save_in_copyboard": save_in_copyboard
+        }
 
         return config
 
-    # validating the data
-    def validating(self, vdic):
-        numeric_field = {"howlong": vdic["howlong"], "howmuch": vdic["howmuch"]}
-        bool_field = {"isup": vdic["isup"], "isdown": vdic["isdown"], "isnum": vdic["isnum"], "ispunct": vdic["ispunct"], "banletters": vdic["banletters"]}
-        defaults = {"howlong": 12, "howmuch": 1}
+    def validating(self, vdic: dict) -> dict:
+        numeric_field: dict = {"howlong": vdic["howlong"], "howmuch": vdic["howmuch"]}
+        bool_field: dict = {
+            "isup": vdic["isup"],
+            "isdown": vdic["isdown"],
+            "isnum": vdic["isnum"],
+            "ispunct": vdic["ispunct"],
+            "banletters": vdic["banletters"],
+            "save_in_copyboard": vdic["save_in_copyboard"]
+        }
+        defaults: dict = {"howlong": 12, "howmuch": 1}
 
-        #checking for defaults
         for i in numeric_field.keys():
             if numeric_field[i].strip() == "":
                 numeric_field[i] = defaults[i]
                 continue
-
-        #validating long and much
-            while True:
-                if numeric_field[i].isdigit():
-                    if int(numeric_field[i]) > 0:
-                        numeric_field[i] = int(numeric_field[i])
-                        break
+            else:
+                while True:
+                    if numeric_field[i].isdigit():
+                        if int(numeric_field[i]) > 0:
+                            numeric_field[i] = int(numeric_field[i])
+                            break
+                        else:
+                            numeric_field[i] = input("Please enter a number bigger than 0!")
                     else:
-                        numeric_field[i] = input("Please enter a number bigger than 0!")
-                else:
-                    numeric_field[i] = input("Please enter a valid number!")
+                        numeric_field[i] = input("Please enter a valid number!")
 
-        # checking for defaults in bools
         for i in bool_field:
             if bool_field[i].strip() == "":
                 bool_field[i] = True
                 continue
+            else:
+                while True:
+                    if bool_field[i].isalpha():
+                        bool_field[i] = bool_field[i].upper()
+                        if bool_field[i] == "Y":
+                            bool_field[i] = True
+                            break
+                        elif bool_field[i] == "N":
+                            bool_field[i] = False
+                            break
+                        else:
+                            bool_field[i] = input("Please enter a Y or N!")
 
-        #validating bools
-            while True:
-                if bool_field[i].isalpha():
-                    bool_field[i] = bool_field[i].upper()
-                    if bool_field[i] == "Y":
-                        bool_field[i] = True
-                        break
-                    elif bool_field[i] == "N":
-                        bool_field[i] = False
-                        break
-                    else:
-                        bool_field[i] = input("Please enter a Y or N!")
-
-        config = numeric_field | bool_field
+        config: dict = numeric_field | bool_field
         return config
 
-    #creating alphabet
-    def creating_alphabet(self, config):
-        bool_field = {"isup": config["isup"], "isdown": config["isdown"], "isnum": config["isnum"], "ispunct": config["ispunct"]}
-        dic3 = [string.ascii_uppercase, string.ascii_lowercase, string.digits, string.punctuation]
-        alphabet = ""
-        j = 0
+    def creating_alphabet(self, config: dict) -> str:
+        bool_field: dict = {
+            "isup": config["isup"],
+            "isdown": config["isdown"],
+            "isnum": config["isnum"],
+            "ispunct": config["ispunct"]
+        }
+        char_sets: list = [
+            string.ascii_uppercase,
+            string.ascii_lowercase,
+            string.digits,
+            string.punctuation
+        ]
+        alphabet: str = ""
+        j: int = 0
+
         for i in bool_field.keys():
             if bool_field[i] == True:
-                alphabet += dic3[j]
+                alphabet += char_sets[j]
             j += 1
 
         if alphabet == "":
@@ -84,43 +103,55 @@ class PasswordGenerator:
 
         return alphabet
 
-#creating a password
-    def generate_passwords(self, config, alphabet):
-        passwords = []
-        password = ""
-        numeric_field = {"howlong": config["howlong"], "howmuch": config["howmuch"]}
-        banword = ["0", "O", "o", "l", "I", "1", "5", "S", "B", "8", "Z", "2", ","]
-        #if banlist in use
+    def generate_passwords(self, config: dict, alphabet: str) -> list[str]:
+        active: list = []
+        bool_field: list = [config["isup"], config["isdown"], config["isnum"], config["ispunct"]]
+        alpha: list = [
+            string.ascii_uppercase,
+            string.ascii_lowercase,
+            string.digits,
+            string.punctuation
+        ]
+
         if config["banletters"] == True:
-            for i in range(0, int(numeric_field["howmuch"])):
-                for j in range(0, int(numeric_field["howlong"])):
-                    letter = secrets.choice(alphabet)
-                    if letter in banword:
-                        continue
-                    password += letter
-                passwords.append(password)
-                password = ""
-        #not in use
-        else:
-            for i in range(0, int(numeric_field["howmuch"])):
-                passwords.append("".join(secrets.choice(alphabet) for i in range(0, numeric_field["howlong"])))
+            banlist: list = list("&|;`()<>#%?/+@=[]{},:")
+            for i in banlist:
+                if i in alphabet:
+                    alphabet = list(alphabet)
+                    alphabet.remove(i)
+                    alphabet = "".join(alphabet)
+
+        for i in range(0, len(bool_field)):
+            if bool_field[i] == True:
+                active.append(alpha[i])
+
+        required: str = "".join([secrets.choice(s) for s in active])
+        password: str = ""
+        passwords: list[str] = []
+
+        for i in range(0, config["howmuch"]):
+            password += required
+
+            for j in range(0, config["howlong"] - len(required)):
+                password += secrets.choice(alphabet)
+
+            password = list(password)
+            shuffle(password)
+            password = "".join(password)
+
+            passwords.append(password)
+            password = ""
 
         return passwords
 
-    def output(self, passwords):
-    #Coping a password into a copyboard
-        if len(passwords) == 1:
-            print("Your password was copied into your clipboard!")
-            pyperclip.copy(passwords[0])
-            print("It will be deleted from your clipboard in 60 seconds. Hurry up!")
-            time.sleep(60)
-            pyperclip.copy("")
-        else:
-            print("Your passwords:", passwords)
+    def output(self, passwords: list[str], config: dict) -> None:
+        if config["save_in_copyboard"] == True:
+            pyperclip.copy(passwords[-1])
 
-    #Saving into a file
-    def password_saver(self, written):
-        with open("file.txt", "a") as f:
+        print(f"Your password(s): {passwords}")
+
+    def password_saver(self, written: list[str]) -> None:
+        with open("passwords.txt", "a") as f:
             for password in written:
                 f.write(password + "\n")
 
@@ -131,4 +162,4 @@ if __name__ == "__main__":
     valid = Password_Generator.validating(inputs)
     alphabets = Password_Generator.creating_alphabet(valid)
     password = Password_Generator.generate_passwords(valid, alphabets)
-    output = Password_Generator.output(password)
+    output = Password_Generator.output(password, valid)
