@@ -4,7 +4,6 @@ import pyperclip
 from random import shuffle
 
 class PasswordGenerator:
-
     def get_input(self) -> dict:
         howlong = input("How long you wanna your password be?(Default is 12)")
         howmuch = input("How many passwords you want?(Default is 1)")
