@@ -154,12 +154,10 @@ class PasswordGenerator:
         with open("passwords.txt", "a") as f:
             for password in written:
                 f.write(password + "\n")
-
-
-if __name__ == "__main__":
-    Password_Generator = PasswordGenerator()
-    inputs = Password_Generator.get_input()
-    valid = Password_Generator.validating(inputs)
-    alphabets = Password_Generator.creating_alphabet(valid)
-    password = Password_Generator.generate_passwords(valid, alphabets)
-    output = Password_Generator.output(password, valid)
+        
+    def creating_passwords(self):
+        inputs = self.get_input()
+        valid = self.validating(inputs)
+        alphabets = self.creating_alphabet(valid)
+        password = self.generate_passwords(valid, alphabets)
+        self.output(password, valid)
