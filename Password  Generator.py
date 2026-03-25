@@ -5,27 +5,19 @@ from random import shuffle
 
 class PasswordGenerator:
     def get_input(self) -> dict:
-        howlong = input("How long you wanna your password be?(Default is 12)")
-        howmuch = input("How many passwords you want?(Default is 1)")
-
-        isup = input("Do you want upper letters?(Y/N)")
-        isdown = input("Do you want lower letters?(Y/N)")
-        isnum = input("Do you want numbers?(Y/N)")
-        ispunct = input("Do you want punctuation?(Y/N)")
-        banletters = input("Do you want to use banletter list in alphabets?(Y/N)")
-        print("Warning! If you want more than 1 password, you should know that only last password will be copied into copyboard.")
-        save_in_copyboard = input("Do you want to save your password in copyboard?(Y/N)")
+        parser = argparse.ArgumentParser(description="Generate a password with random characters.")
+        parser.add_argument("howlong", type=str, default=12, help="How long password to generate.")
+        parser.add_argument("howmuch", type=str, default=1, help="How much password to generate.")
+        args = parser.parse_args()
 
         config = {
-            "howlong": howlong,
-            "howmuch": howmuch,
-            "isup": isup,
-            "isdown": isdown,
-            "isnum": isnum,
-            "ispunct": ispunct,
-            "banletters": banletters,
-            "save_in_copyboard": save_in_copyboard
-        }
+            "howlong": args.howlong,
+            "howmuch": args.howmuch,
+            "isup": "Y",
+            "isdown": "Y",
+            "isnum": "Y",
+            "ispunct": "Y",
+            "banletters": "Y"}
 
         return config
 
