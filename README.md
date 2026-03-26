@@ -111,8 +111,7 @@ password-generator/
 
 ## 💡 Future Improvements
 
-* Password strength checker
-* CLI arguments support (`--length`, `--digits`, etc.)
+* CLI arguments support (`--length`, `--digits`, etc.) done
 * Passphrase generator (e.g. `apple-dog-sun`)
 * GUI interface
 * Custom user-defined character sets
