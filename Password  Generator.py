@@ -1,7 +1,6 @@
 import string
 import secrets
 import pyperclip
-from random import shuffle
 
 class PasswordGenerator:
     def get_input(self) -> dict:
@@ -10,7 +9,7 @@ class PasswordGenerator:
 
         isup = input("Do you want upper letters?(Y/N)")
         isdown = input("Do you want lower letters?(Y/N)")
-        isnum = input("Do you want numbers?(Y/N)")
+        isnumber = input("Do you want numbers?(Y/N)")
         ispunct = input("Do you want punctuation?(Y/N)")
         banletters = input("Do you want to use banletter list in alphabets?(Y/N)")
         print("Warning! If you want more than 1 password, you should know that only last password will be copied into copyboard.")
@@ -21,7 +20,7 @@ class PasswordGenerator:
             "howmuch": howmuch,
             "isup": isup,
             "isdown": isdown,
-            "isnum": isnum,
+            "isnumber": isnumber,
             "ispunct": ispunct,
             "banletters": banletters,
             "save_in_copyboard": save_in_copyboard
@@ -34,11 +33,12 @@ class PasswordGenerator:
         bool_field: dict = {
             "isup": vdic["isup"],
             "isdown": vdic["isdown"],
-            "isnum": vdic["isnum"],
+            "isnumber": vdic["isnumber"],
             "ispunct": vdic["ispunct"],
             "banletters": vdic["banletters"],
             "save_in_copyboard": vdic["save_in_copyboard"]
         }
+
         defaults: dict = {"howlong": 12, "howmuch": 1}
 
         for i in numeric_field.keys():
@@ -62,16 +62,15 @@ class PasswordGenerator:
                 continue
             else:
                 while True:
-                    if bool_field[i].isalpha():
-                        bool_field[i] = bool_field[i].upper()
-                        if bool_field[i] == "Y":
-                            bool_field[i] = True
-                            break
-                        elif bool_field[i] == "N":
-                            bool_field[i] = False
-                            break
-                        else:
-                            bool_field[i] = input("Please enter a Y or N!")
+                    bool_field[i] = bool_field[i].strip().upper()
+                    if bool_field[i] == "Y":
+                        bool_field[i] = True
+                        break
+                    elif bool_field[i] == "N":
+                        bool_field[i] = False
+                        break
+                    else:
+                        bool_field[i] = input("Please enter a Y or N!")
 
         config: dict = numeric_field | bool_field
         return config
@@ -80,7 +79,7 @@ class PasswordGenerator:
         bool_field: dict = {
             "isup": config["isup"],
             "isdown": config["isdown"],
-            "isnum": config["isnum"],
+            "isnumber": config["isnumber"],
             "ispunct": config["ispunct"]
         }
         char_sets: list = [
@@ -102,9 +101,18 @@ class PasswordGenerator:
 
         return alphabet
 
+    def validate_length_vs_requirements(self, config: dict, alphabet: str) -> dict:
+        required_count :int = sum([config["isup"], config["isdown"], config["isnumber"], config["ispunct"]])
+        if config["howlong"] < required_count:
+            print(f"Попередження: довжина пароля збільшена з {config['howlong']} "
+                  f"до {required_count}, оскільки обрано {required_count} типів символів.")
+            config["howlong"] = required_count
+
+        return config
+
     def generate_passwords(self, config: dict, alphabet: str) -> list[str]:
         active: list = []
-        bool_field: list = [config["isup"], config["isdown"], config["isnum"], config["ispunct"]]
+        bool_field: list = [config["isup"], config["isdown"], config["isnumber"], config["ispunct"]]
         alpha: list = [
             string.ascii_uppercase,
             string.ascii_lowercase,
@@ -135,7 +143,7 @@ class PasswordGenerator:
                 password += secrets.choice(alphabet)
 
             password = list(password)
-            shuffle(password)
+            secrets.SystemRandom().shuffle(password)
             password = "".join(password)
 
             passwords.append(password)
@@ -158,5 +166,10 @@ class PasswordGenerator:
         inputs = self.get_input()
         valid = self.validating(inputs)
         alphabets = self.creating_alphabet(valid)
-        password = self.generate_passwords(valid, alphabets)
+        validating_length = self.validate_length_vs_requirements(valid, alphabets)
+        password = self.generate_passwords(validating_length, alphabets)
         self.output(password, valid)
+
+if __name__ == "__main__":
+    password_generator = PasswordGenerator()
+    password_generator.creating_passwords()
