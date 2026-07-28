@@ -132,7 +132,7 @@ password-generator/
 
 ## 💡 Future Improvements
 
-* CLI arguments support (`--length`, `--digits`, etc.) ✅ done
+* CLI arguments support (`--length`, `--digits`, etc.) 
 * Passphrase generator (e.g. `apple-dog-sun`)
 * Labeled password entries (e.g. save password under a name like "gmail")
 * Search/filter saved passwords by label
