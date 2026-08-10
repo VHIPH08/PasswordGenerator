@@ -1,10 +1,12 @@
 import json
 
-def save(password:list[bytes]) -> None:
+
+def save(password: list[bytes]) -> None:
     with open('password.json', 'w') as f:
         json.dump(password, f)
 
-def load_all() -> list[str] | None:
+
+def load_all() -> list[str]:
     try:
         with open("password.json", 'r') as f:
             data = json.load(f)
@@ -12,22 +14,22 @@ def load_all() -> list[str] | None:
 
     except FileNotFoundError:
         print("File not found.")
+        return []
+
 
 def delete_all() -> None:
-    try:
-        with open("password.json", 'w') as f:
-            f.write("{}")
+    with open("password.json", 'w') as f:
+        json.dump([], f) 
 
-    except FileNotFoundError:
-        print("File not found.")
 
-def delete(index:int) -> None:
-
+def delete(index: int) -> None:
     data = load_all()
-    if index > len(data):
+    if index < 0 or index >= len(data):
         print("Index out of range.")
     else:
         data.pop(index)
         save(data)
+
+
 
 
